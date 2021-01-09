@@ -10,4 +10,8 @@ Get the branch of NetworkX which fixed the bug of [#3985](https://github.com/net
 
 ## Get Started
 ### Data Preparation
+- Run the script `./src/data_preprocess.sh` to preprocess the isoform sequence, domain and expression data, as well as the GO hierarchy. The ready-to-use data for model training will be save in the `./data/input/` directory.
+
 ### Train models
+- Run the script `./src/train.sh` for training models. You can change the tissue index in the script to train models for different tissues appearing in the [tissue list]().
+- Trained models will be saved in the `./saved_models/` directory. The model performance with predictions will be saved in the `./results` directory.
