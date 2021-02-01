@@ -18,12 +18,20 @@ conda install -c anaconda tensorflow-gpu
 ```
 
 ## Data preparation
+FINER is applied to predict tissue-specific isoform functions and interactions. The data used by FINER includes: gene-level functional annotation ground-truth, gene-level protein-protein interactions, isoform amino acid sequences, conserved domains of isoforms derived from their sequences, and isoform co-expression networks. Raw data are provided in the file `./data.zip`. Follow the following steps to prepare the tissue-specific datasets:
 - Unzip the file `./data.zip`.
-- Run the script `./preprocessing/data_preprocess.sh` to preprocess the isoform sequence, domain and expression data, as well as the GO hierarchy. The ready-to-use data for model training will be save in the `./data/input/` directory.
+- Run the script to build co-expression networks of isoforms from their expression profiles in different RNA-seq experiments (measured in Transcripts Per Million or TPM), preprocess the isoform sequences, conserved domains for the use of the model, as well as build the Gene Ontology hierarchy. After which, the ready-to-use data for model training and evaluation will be save in the `./data/input/` directory.
+```
+sh ./preprocessing/data_preprocess.sh
+```
+
 
 ## Training and evaluation
-- Run the script `./src/train.sh` for training models. You can change the tissue index in the script to train models for different tissues appearing in the [tissue list]().
+- Run the script for training models. Tissue index can be changed in the script to train models for different tissues appearing in the [tissue list](https://github.com/haochenucr/FINER/blob/main/src/train.sh).
+```
+sh ./src/train.sh
+```
 - Trained models will be saved in the `./saved_models/` directory. The model performance with predictions will be saved in the `./results/` directory.
 
-## Predicted tissue-specific isoform functions
-## Predicted tissue-specific isoform-isoform interaction networks
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
