@@ -9,6 +9,7 @@ FINER is a unified deep learning framework to jointly predict protein isoform fu
 Get the branch of NetworkX which fixed the bug of [#3985](https://github.com/networkx/networkx/pull/3985).</br>
 - [NumPy >= 1.17.3](https://numpy.org/)</br>
 - [SciPy >= 1.3.2](https://www.scipy.org/)</br>
+- [scikit-learn >= 0.21.3](https://scikit-learn.org/stable/)</br>
 
 FINER is implemented using TensorFlow. We suggest users to install the TensorFlow environment with GPU support using [Anaconda](https://anaconda.org/anaconda/tensorflow-gpu).
 ```
