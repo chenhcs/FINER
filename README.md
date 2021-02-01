@@ -27,7 +27,7 @@ sh ./preprocessing/data_preprocess.sh
 
 
 ## Training and evaluation
-- Run the script for training models. Tissue index can be changed in the script to train models for different tissues appearing in the [tissue list](https://github.com/haochenucr/FINER/blob/main/src/train.sh).
+- Run the script for training models. Tissue index can be changed in the script to train models for different tissues appearing in the [list](https://github.com/haochenucr/FINER/blob/main/src/train.sh).
 ```
 sh ./src/train.sh
 ```
