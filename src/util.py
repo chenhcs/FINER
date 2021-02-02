@@ -293,6 +293,7 @@ def write_result(tissue_id, prediction, positive_gene_map, geneid, isoid, aucs, 
         cnt += 1
     fw = open('../results/perf_eval/' + tissue_id + '.txt', 'w')
     i = 0
+    fw.write('GO term\tAUC\tAUPRC\n')
     for go in positive_gene_map.keys():
         fw.write(go + '\t' + str(aucs[i]) + '\t' + str(prcs[i]) + '\n')
         i += 1

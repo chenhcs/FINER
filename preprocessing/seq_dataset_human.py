@@ -69,7 +69,7 @@ aa_num_dict['W'] = 18
 aa_num_dict['R'] = 19
 aa_num_dict['G'] = 20
 
-print('loading Sequence...')
+print('Convert isoform sequences to numpy arrays...')
 X_train = []
 X_test = []
 gene_index = []
@@ -117,7 +117,7 @@ for id in training_iso_ids:
 for id in test_iso_ids:
     X_test.append(id_numseq_map[id])
 
-print('loading complete...')
+print('Done')
 X_train_np = np.array(sequence.pad_sequences(X_train, longest))
 X_test_np = np.array(sequence.pad_sequences(X_test, longest))
 print(X_train_np.shape)

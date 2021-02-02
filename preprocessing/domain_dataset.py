@@ -4,6 +4,7 @@ from sys import argv
 
 script, dataset = argv
 
+print('Convert isoform domains to numpy arrays...')
 fr = open('../data/domains/domain_id_mapping.txt')
 entry = fr.readline().split('\n')[0]
 domain_dic = {}
@@ -19,13 +20,12 @@ fr = open('../data/domains/human_isoform_domains.txt')
 entry = fr.readline().split('\n')[0]
 isofDmDic = {}
 while entry != '':
-    isof, domains = entry.split('\t')[1:]
-    domains += '0'
-    tmpD = [domain_dic[key] for key in domains.split(' ')]
-    if len(tmpD) > 1:
-        tmpD.pop()
-    print(tmpD)
-    isofDmDic[isof] = tmpD
+    isof = entry.split('\t')[1]
+    if len(entry.split('\t')) > 2:
+        domains = entry.split('\t')[2]
+        tmpD = [domain_dic[key] for key in domains.split(' ')]
+        #print(tmpD)
+        isofDmDic[isof] = tmpD
     entry = fr.readline().split('\n')[0]
 fr.close()
 
@@ -40,7 +40,7 @@ for isoid in HUMANtrain_iso_id_ho_s:
         if len(isofDmDic[isoid]) > max_length:
             max_length = len(isofDmDic[isoid])
     else:
-        print(isoid)
+        #print(isoid)
         HUMANX_train_domain.append([0])
 
 for isoid in HUMANtest_iso_id_ho_s:
@@ -49,14 +49,14 @@ for isoid in HUMANtest_iso_id_ho_s:
         if len(isofDmDic[isoid]) > max_length:
             max_length = len(isofDmDic[isoid])
     else:
-        print(isoid)
+        #print(isoid)
         HUMANX_test_domain.append([0])
 
 print(max_length)
 HUMANX_train_np = np.array(sequence.pad_sequences(HUMANX_train_domain, max_length))
 HUMANX_test_np = np.array(sequence.pad_sequences(HUMANX_test_domain, max_length))
 
-print('loading complete...')
+print('Done')
 print(HUMANX_train_np)
 print(HUMANX_test_np)
 print(HUMANX_train_np.shape)

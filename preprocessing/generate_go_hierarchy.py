@@ -48,6 +48,7 @@ def gen_go_ancestor_dic(direct_ancestor_dic):
     return go_ancestor_dic
 
 if __name__=='__main__':
+    print('Generate GO hierarchy...')
     go_obo_file = '../data/GO_terms/go.obo'
     direct_ancestor_dic = gen_direct_ancestor_dic(go_obo_file)
     print(len(direct_ancestor_dic.keys()))
