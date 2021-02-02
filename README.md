@@ -19,10 +19,10 @@ conda install -c anaconda tensorflow-gpu
 ```
 
 ## Data preparation
-FINER is applied to predict tissue-specific isoform functions and interactions. The data used by FINER includes: (i) gene-level functional annotation ground-truth, (ii) gene-level protein-protein interactions, (iii) isoform amino acid sequences, (iv) conserved domains of isoforms derived from their sequences, (v) and isoform co-expression networks. Raw data are provided in the file `./data.tar.zip`. Follow the steps to prepare the tissue-specific datasets:
-- Extract the contents of the `./data.tar.zip` file.
+FINER is applied to predict tissue-specific isoform functions and interactions. The data used by FINER includes: (i) gene-level functional annotation ground-truth, (ii) gene-level protein-protein interactions, (iii) isoform amino acid sequences, (iv) conserved domains of isoforms derived from their sequences, (v) and isoform co-expression networks. Raw data are provided in the file `./data.tar.gz`. Follow the steps to prepare the tissue-specific datasets:
+- Extract the contents of the `./data.tar.gz` file.
 ```
-tar -zxvf data.tar.zip
+tar -zxvf data.tar.gz
 ```
 - Run the `data_preprocess.sh` script to build co-expression networks of isoforms from their expression profiles in different RNA-seq experiments (measured in Transcripts Per Million or TPM), convert the isoform sequences, conserved domains to Numpy arrays for the use of the model, as well as build the Gene Ontology hierarchy. After which, the ready-to-use data for model training and evaluation will be save in the `./data/input/` directory.
 ```
