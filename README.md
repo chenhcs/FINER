@@ -19,18 +19,24 @@ conda install -c anaconda tensorflow-gpu
 ```
 
 ## Data preparation
-FINER is applied to predict tissue-specific isoform functions and interactions. The data used by FINER includes: gene-level functional annotation ground-truth, gene-level protein-protein interactions, isoform amino acid sequences, conserved domains of isoforms derived from their sequences, and isoform co-expression networks. Raw data are provided in the file `./data.zip`. Follow the following steps to prepare the tissue-specific datasets:
-- Unzip the file `./data.zip`.
-- Run the script to build co-expression networks of isoforms from their expression profiles in different RNA-seq experiments (measured in Transcripts Per Million or TPM), preprocess the isoform sequences, conserved domains for the use of the model, as well as build the Gene Ontology hierarchy. After which, the ready-to-use data for model training and evaluation will be save in the `./data/input/` directory.
+FINER is applied to predict tissue-specific isoform functions and interactions. The data used by FINER includes: (i) gene-level functional annotation ground-truth, (ii) gene-level protein-protein interactions, (iii) isoform amino acid sequences, (iv) conserved domains of isoforms derived from their sequences, (v) and isoform co-expression networks. Raw data are provided in the file `./data.tar.zip`. Follow the steps to prepare the tissue-specific datasets:
+- Extract the contents of the `./data.tar.zip` file.
 ```
-sh ./preprocessing/data_preprocess.sh
+tar -zxvf data.tar.zip
+```
+- Run the `data_preprocess.sh` script to build co-expression networks of isoforms from their expression profiles in different RNA-seq experiments (measured in Transcripts Per Million or TPM), convert the isoform sequences, conserved domains to Numpy arrays for the use of the model, as well as build the Gene Ontology hierarchy. After which, the ready-to-use data for model training and evaluation will be save in the `./data/input/` directory.
+```
+cd preprocessing/
+sh data_preprocess.sh
 ```
 
 
 ## Training and evaluation
+We train each FINER model with one Nvidia K80 GPU which significantly accelerated the training process than CPUs.
 - Run the script for training models. Tissue index can be changed in the script to train models for different tissues appearing in the [list](https://github.com/haochenucr/FINER/blob/main/src/train.sh).
 ```
-sh ./src/train.sh
+cd src/
+sh train.sh
 ```
 - Trained models will be saved in the `./saved_models/` directory. The model performance with predictions will be saved in the `./results/` directory.
 
