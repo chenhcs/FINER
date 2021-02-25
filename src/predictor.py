@@ -2,15 +2,14 @@
 """
 
 import numpy as np
-from sklearn import metrics
-from sklearn.metrics import auc, roc_auc_score, average_precision_score, precision_recall_curve
+from sklearn.metrics import roc_auc_score, average_precision_score
 import tensorflow as tf
 from PyramidPooling import PyramidPooling
 from tensorflow.keras.layers import Dense, Dropout, SpatialDropout1D
 from tensorflow.keras.layers import Activation, Flatten, Input, Masking
 from tensorflow.keras.layers import Conv1D, MaxPool1D
 from tensorflow.keras.layers import BatchNormalization
-from tensorflow.keras.layers import LSTM, GRU
+from tensorflow.keras.layers import LSTM
 from tensorflow.keras.layers import Embedding
 from tensorflow.keras.layers import Concatenate
 from tensorflow.keras import regularizers

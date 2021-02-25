@@ -6,15 +6,10 @@ import numpy as np
 import tensorflow as tf
 import copy
 import util
-import matplotlib
-import matplotlib.pyplot as plt
 import net_util
 import networkx as nx
 from tensorflow.keras.layers import Embedding
 from sklearn.preprocessing import normalize
-from sklearn.manifold import TSNE
-matplotlib.use('Agg')
-
 
 class Encoder(object):
     def __init__(self,
@@ -45,6 +40,7 @@ class Encoder(object):
         self.positive = config["positive"]
         self.negative = config["negative"]
         self.min_degree = config["min_degree"]
+        self.lambda_func = config["lambda_func"]
         self.window = window_size
 
         self.ppi_net = ppi_net
@@ -156,7 +152,7 @@ class Encoder(object):
         func_loss = self.func_sim_loss(self.link_probs_1,
                                        self.func_feature_sim)
 
-        self.emb_loss = 1.0 * nb_loss + 1.0 * lp_loss + 100.0 * coexp_loss + 0.01 * func_loss
+        self.emb_loss = 1.0 * nb_loss + 1.0 * lp_loss + 100.0 * coexp_loss + self.lambda_func * func_loss
         self.lr = tf.compat.v1.train.exponential_decay(
             self.learning_rate,
             global_step,
@@ -173,7 +169,7 @@ class Encoder(object):
                                        self.func_feature_sim)
         self.lp_loss = self.linkpred_loss(
             self.embWemb_2,
-            self.link_weights) + tf.nn.l2_loss(self.W - 1) + 0.01 * func_loss
+            self.link_weights) + tf.nn.l2_loss(self.W - 1) + self.lambda_func * func_loss
         self.lr = tf.compat.v1.train.exponential_decay(
             self.learning_rate,
             global_step,
@@ -386,12 +382,6 @@ class Encoder(object):
                 negative_indexes_map[i] = negative_indexes
 
                 b = 0.01
-                #link_func_dis = np.sum(np.square((func_feature[center_repeat_ind_link] - func_feature[link_indexes])), axis=1)
-                #print(link_func_dis)
-                #print('l', np.mean(link_func_dis))
-                #nolink_func_dis = np.sum(np.square((func_feature[center_repeat_ind_nolink] - func_feature[nolink_indexes])), axis=1)
-                #print(nolink_func_dis)
-                #print('n', np.mean(nolink_func_dis))
                 func_feature_sim_map[i] = np.hstack(
                     (b - np.sum(np.square(
                         (func_feature[center_repeat_ind_link] -
@@ -537,13 +527,10 @@ class Encoder(object):
         predicted_links = embeddings[nodes_idx, :].dot(np.diag(W)).dot(
             np.transpose(embeddings[nodes_idx, :]))
 
-        all_link_weights = predicted_links.flatten()
-        rank = int(len(all_link_weights) * 0.0005)
-        link_thresh = all_link_weights[np.argpartition(all_link_weights,
-                                                       -rank)[-rank]]
-        print("link_thresh", 1.0 / (1.0 + np.exp(-link_thresh)))
+        link_thresh = self.link_thresh
+        print("link_thresh", link_thresh)
 
-        r, c = np.where(predicted_links >= link_thresh)
+        r, c = np.where(1.0 / (1.0 + np.exp(-predicted_links)) >= link_thresh)
         for i in range(len(r)):
             predicted_edges.append([nodes_idx[r[i]], nodes_idx[c[i]]])
 

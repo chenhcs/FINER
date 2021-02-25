@@ -166,7 +166,7 @@ def main():
 
     print('Saving model and results...')
     util.write_result(tissue_id, prediction, positive_gene_map,
-                      geneid, isoid, aucs, prcs)
+                      geneid, isoid, aucs, prcs, iii_net)
     ckpt_path = '../saved_models/' + tissue_id + '_predictor_final'
     if not os.path.exists(ckpt_path):
         os.makedirs(ckpt_path)

@@ -280,18 +280,25 @@ def find_tissue_enhanced_isoforms(tissue_id, dataset):
     return tissue_enhanced_iso
 
 
-def write_result(tissue_id, prediction, positive_gene_map, geneid, isoid, aucs, prcs):
+def write_result(tissue_id, prediction, positive_gene_map, geneid, isoid, aucs, prcs, iii_net):
     cnt = 0
     print(prediction.shape)
     for go in positive_gene_map.keys():
-        fw = open('../results/GO_predictions/predictions_' + tissue_id + '_'+ go + '.txt', 'w')
+        fw = open('../results/GO_predictions/predictions_' + tissue_id + '_'+ go + '.tsv', 'w')
         for j in range(len(isoid)):
             fw.write(isoid[j] + '\t')
             fw.write(geneid[j] + '\t')
             fw.write(str(1. / (1. + np.exp(-prediction[j, cnt]))) + '\n')
         fw.close()
         cnt += 1
-    fw = open('../results/perf_eval/' + tissue_id + '.txt', 'w')
+
+    fw = open('../results/III_optimized/tissue_iii_optimized_' + tissue_id + '.tsv', 'w')
+    for edge in list(iii_net.edges()):
+        node1, node2 = edge
+        fw.write(isoid[node1] + '\t' + isoid[node2] + '\n')
+    fw.close()
+
+    fw = open('../results/perf_eval/' + tissue_id + '.tsv', 'w')
     i = 0
     fw.write('GO term\tAUC\tAUPRC\n')
     for go in positive_gene_map.keys():
