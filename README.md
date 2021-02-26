@@ -40,5 +40,8 @@ sh train.sh
 ```
 - Trained models will be saved in the `./saved_models/` directory. The model performance with predictions will be saved in the `./results/` directory.
 
+## Predictions
+Predictions on tissue specific GO terms by FINER are provided in `./predictions/` directory.
+
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
