@@ -42,7 +42,7 @@ sh train.sh
 - Modify the files in the `./hyper_prms/` directory to adjust model hyper-parameters.
 
 ## Predictions
-Predictions on tissue specific GO terms by FINER are provided in the `./predictions/` directory.
+Predictions on tissue-specific GO terms and tissue-specific isoform-isoform interactions by FINER are provided in the `./predictions/` directory.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
