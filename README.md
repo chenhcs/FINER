@@ -46,9 +46,13 @@ sh train.sh
 - Put your raw data in the folder created above in the format as specified in ./data_format/
 - Run the following command to preprocess the data.
 ```
+cd preprocessing/
+sh data_preprocess.sh {your dataset}
 ```
 - Run the following command to train a model on the dataset for the tissue of your interest.
 ```
+cd src/
+sh train.sh {your dataset}
 ```
 
 ## Predictions by FINER
