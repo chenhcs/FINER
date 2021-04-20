@@ -41,6 +41,9 @@ sh train.sh
 - Trained models will be saved in the `./saved_models/` directory. The model performance with predictions will be saved in the `./results/` directory.
 - Modify the files in the `./hyper_prms/` directory to adjust model hyper-parameters.
 
+## Custom tissue-specific datasets
+- 
+
 ## Predictions by FINER
 Predictions on tissue-specific GO terms and tissue-specific isoform-isoform interactions by FINER are provided in the `./predictions/` directory.
 
