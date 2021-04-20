@@ -42,7 +42,14 @@ sh train.sh
 - Modify the files in the `./hyper_prms/` directory to adjust model hyper-parameters.
 
 ## Custom tissue-specific datasets
-- 
+- Create a new folder e.g. ./data_new/
+- Put your raw data in the folder created above in the format as specified in ./data_format/
+- Run the following command to preprocess the data.
+```
+```
+- Run the following command to train a model on the dataset for the tissue of your interest.
+```
+```
 
 ## Predictions by FINER
 Predictions on tissue-specific GO terms and tissue-specific isoform-isoform interactions by FINER are provided in the `./predictions/` directory.
