@@ -1,8 +1,10 @@
 #!/bin/bash
+folder=$1
 
-python generate_go_hierarchy.py
-python seq_dataset_human.py major
-python seq_dataset_human.py brain
-python domain_dataset.py major
-python domain_dataset.py brain
-python construct_coexp_net.py
+python generate_go_hierarchy.py $folder
+python seq_dataset_human.py $folder major
+python seq_dataset_human.py $folder brain
+python domain_dataset.py $folder major
+python domain_dataset.py $folder brain
+python construct_coexp_net.py $folder major
+python construct_coexp_net.py $folder brain

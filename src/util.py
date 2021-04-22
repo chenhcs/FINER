@@ -5,35 +5,22 @@ import os
 from scipy import sparse
 from numpy import genfromtxt
 import time
+import shutil
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
-def get_data(tissue_id, dataset):
+def get_data(tissue_id, folder, dataset):
     #Load dataset
-    if dataset == 'major':
-        X_train_seq = np.load('../data/input/major/human_sequence_train.npz')['data']
-        X_train_dm = np.load('../data/input/major/human_domain_train.npy')
-        X_test_seq = np.load('../data/input/major/human_sequence_test.npz')['data']
-        X_test_dm = np.load('../data/input/major/human_domain_test.npy')
-        X_train_geneid = np.load('../data/input/major/train_gene_list.npy')
-        X_train_isoid = np.load('../data/input/major/train_isoform_list.npy')
-        X_test_geneid = np.load('../data/input/major/test_gene_list.npy')
-        X_test_isoid = np.load('../data/input/major/test_isoform_list.npy')
-
-        X_expression = sparse.load_npz('../data/input/major/co_expression_net/' + tissue_id + '_coexp_net.npz')
-
-    elif dataset == 'brain':
-        X_train_seq = np.load('../data/input/brain/human_sequence_train.npz')['data']
-        X_train_dm = np.load('../data/input/brain/human_domain_train.npy')
-        X_test_seq = np.load('../data/input/brain/human_sequence_test.npz')['data']
-        X_test_dm = np.load('../data/input/brain/human_domain_test.npy')
-        X_train_geneid = np.load('../data/input/brain/train_gene_list.npy')
-        X_train_isoid = np.load('../data/input/brain/train_isoform_list.npy')
-        X_test_geneid = np.load('../data/input/brain/test_gene_list.npy')
-        X_test_isoid = np.load('../data/input/brain/test_isoform_list.npy')
-
-        X_expression = sparse.load_npz('../data/input/brain/co_expression_net/' + tissue_id + '_coexp_net.npz')
+    X_train_seq = np.load('../' + folder + '/input' + dataset + '/human_sequence_train.npz')['data']
+    X_train_dm = np.load('../' + folder + '/input' + dataset + '/human_domain_train.npy')
+    X_test_seq = np.load('../' + folder + '/input' + dataset + '/human_sequence_test.npz')['data']
+    X_test_dm = np.load('../' + folder + '/input' + dataset + '/human_domain_test.npy')
+    X_train_geneid = np.load('../' + folder + '/input' + dataset + '/train_gene_list.npy')
+    X_train_isoid = np.load('../' + folder + '/input' + dataset + '/train_isoform_list.npy')
+    X_test_geneid = np.load('../' + folder + '/input' + dataset + '/test_gene_list.npy')
+    X_test_isoid = np.load('../' + folder + '/input' + dataset + '/test_isoform_list.npy')
+    X_expression = sparse.load_npz('../' + folder + '/input' + dataset + '/co_expression_net/' + tissue_id + '_coexp_net.npz')
 
     X_train_dm = X_train_dm[:, -15:]
     X_test_dm = X_test_dm[:, -15:]
@@ -103,7 +90,7 @@ def group_samples_by_lengths(indexes, seq_features):
 
 
 #Generate labels
-def generate_multi_label(tissue_id, X_train_geneid, X_test_geneid, positive_gene_map):
+def generate_multi_label(tissue_id, folder, X_train_geneid, X_test_geneid, positive_gene_map):
     def generate_label(X_train_geneid, X_test_geneid, positive_gene):
         y_train = np.array([])
         y_test = np.array([])
@@ -142,7 +129,10 @@ def generate_multi_label(tissue_id, X_train_geneid, X_test_geneid, positive_gene
         neg_pos_ratio = (len(X_train_geneid) - train_pos_iso_num) / train_pos_iso_num
         return y_train, y_test, eval_pos_repeat, neg_pos_ratio
 
-    label_path = "../data/tmp_data/" + tissue_id + "_labels.npy"
+    dir = '../' + folder + '/tmp_data/'
+    if not os.path.isdir(dir):
+        os.mkdir(dir)
+    label_path =  dir + tissue_id + '_labels.npy'
     if label_path and os.path.exists(label_path):
         y_train, y_test, np_ratios, eval_repeats = np.load(
             label_path, allow_pickle=True)
@@ -170,7 +160,7 @@ def generate_multi_label(tissue_id, X_train_geneid, X_test_geneid, positive_gene
         np.save(
             label_path, np.array([y_train, y_test, np_ratios, eval_repeats]))
 
-    go_ancestors = np.load('../data/GO_terms/go_ancestors.npy', allow_pickle=True)
+    go_ancestors = np.load('../' + folder + '/GO_terms/go_ancestors.npy', allow_pickle=True)
     go_ancestors = go_ancestors[0]
     num_terms = len(positive_gene_map)
     go_hier = np.zeros([num_terms, num_terms])
@@ -183,7 +173,7 @@ def generate_multi_label(tissue_id, X_train_geneid, X_test_geneid, positive_gene
     return y_train, y_test, np_ratios, eval_repeats, gos, go_hier
 
 
-def pos_gene_set(selected_tissue_gos):
+def pos_gene_set(folder, selected_tissue_gos):
     def parse_annotation_file(goa_file, positive_gene_map):
         fr = open(goa_file)
         while True:
@@ -204,28 +194,25 @@ def pos_gene_set(selected_tissue_gos):
         fr.close()
 
     positive_gene_map = {}
-    parse_annotation_file('../data/GO_annotations/human_annotations.txt', positive_gene_map)
+    parse_annotation_file('../' + folder + '/GO_annotations/human_annotations.txt', positive_gene_map)
 
     return positive_gene_map
 
 
-def get_tissue_go(tissue_idx):
-    fr = open('../data/GO_terms/tissue_specific_GOs.txt')
-    for i in range(tissue_idx):
-        line = fr.readline()
-        if not line:
-            break
-        columns = line.split('\n')[0].split('\t')
-        tissue_id, tissue_name = columns[0:2]
-        tissue_name = '_'.join(tissue_name.split('(')[0][:-1].split(' '))
-        go_terms = columns[2:]
-    fr.close()
-    return tissue_id, tissue_name, go_terms
+def get_tissue_go(tissue_id, folder):
+    with open('../' + folder + '/GO_terms/tissue_specific_GOs.txt') as fr:
+        for line in fr:
+            columns = line.split('\n')[0].split('\t')
+            if columns[0] == tissue_id:
+                tissue = columns[1]
+                go_terms = columns[2:]
+                break
+    return tissue, go_terms
 
 
-def find_tissue_enhanced_isoforms(tissue_id, dataset):
+def find_tissue_enhanced_isoforms(tissue_id, folder, dataset):
     iso_list = []
-    fr = open('../data/expression/' + tissue_id + '.txt')
+    fr = open('../' + folder + '/expression/' + tissue_id + '.txt')
     line = fr.readline()
     while True:
         line = fr.readline()
@@ -234,32 +221,38 @@ def find_tissue_enhanced_isoforms(tissue_id, dataset):
         iso, _ = line.split('\t')[0:2]
         iso_list.append(iso)
 
-    tissues = []
-    if dataset == 'major':
-        fold = 4.0
-        fr = open('../data/expression/major_tissue_dataset.txt')
-        while True:
-            line = fr.readline()
-            if not line:
-                break
-            tissue = '_'.join(line.split('\n')[0].split(' '))
-            tissues.append(tissue)
-        fr.close()
-    elif dataset == 'brain':
+    tissues = set([tissue_id])
+
+    if dataset == '/brain':
         fold = 2.0
         fr = open('../data/expression/brain_dataset.txt')
         while True:
             line = fr.readline()
             if not line:
                 break
-            tissue = '_'.join(line.split('\n')[0].split(' '))
-            tissues.append(tissue)
+            tissue = line.split()[0]
+            tissues.add(tissue)
+        fr.close()
+    else:
+        fold = 4.0
+        fr = open('../data/expression/major_tissue_dataset.txt')
+        while True:
+            line = fr.readline()
+            if not line:
+                break
+            tissue = line.split()[0]
+            tissues.add(tissue)
         fr.close()
 
     tissue_exp_map = {}
     other_tissue_exp_map = {}
     for tissue in tissues:
-        exp_mat = genfromtxt('../data/expression/' + tissue + '.txt', delimiter='\t')
+        exp_file = '../' + folder + '/expression/' + tissue + '.txt'
+        if not os.path.exists(exp_file):
+            src_file = '../data/expression/' + tissue + '.txt'
+            if os.path.exists(src_file):
+                shutil.copy(src_file, exp_file)
+        exp_mat = genfromtxt(exp_file, delimiter='\t')
         exp_mat = exp_mat[1:, 2:]
         iso_mean_exp = np.mean(exp_mat, axis=1)
         if tissue != tissue_id:

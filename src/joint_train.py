@@ -17,8 +17,14 @@ import time
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-script, tissue_idx, dataset = argv
-
+if len(argv) > 3:
+    folder = argv[1]
+    tissue_id = argv[2]
+    dataset = '/' + argv[3]
+else:
+    folder = argv[1]
+    tissue_id = argv[2]
+    dataset = ''
 
 def train_predictor(predictor, X_train_seq, X_train_dm, y_train, X_test_seq,
                     X_test_dm, y_test, X_train_geneid, X_test_geneid, go,
@@ -71,17 +77,17 @@ def main():
     tf.compat.v1.disable_eager_execution()
     model_save_dir = '../saved_models'
     iterations = 4
-    tissue_id, tissue_name, tissue_gos = util.get_tissue_go(int(tissue_idx))
-    print('tissue: ' + tissue_id + '(' + tissue_name + ')')
+    tissue, tissue_gos = util.get_tissue_go(tissue_id, folder)
+    print('tissue: ' + tissue_id + ' ' + tissue)
 
     X_train_seq, X_train_dm, X_test_seq, X_test_dm, X_train_geneid, \
     X_train_isoid, X_test_geneid, X_test_isoid, X_train_expression = util.get_data(
-        tissue_id + '_' + tissue_name, dataset)
+        tissue_id, folder, dataset)
 
-    positive_gene_map = util.pos_gene_set(tissue_gos)
+    positive_gene_map = util.pos_gene_set(folder, tissue_gos)
     y_train, y_test, np_ratios, eval_repeats, go, go_hier = \
     util.generate_multi_label(
-        tissue_id, X_train_geneid, X_test_geneid, positive_gene_map)
+        tissue_id, folder, X_train_geneid, X_test_geneid, positive_gene_map)
     pos_iso_idx, non_functional_set = pos_gene_stats(
         y_train, X_train_geneid)
 
@@ -127,12 +133,13 @@ def main():
         print('Train from scratch...')
 
     # Read tissue specific ppi
-    ppi_file_name = '../data/tissue_specific_PPIs/' + tissue_id + '.txt'
+    ppi_file_name = '../' + folder + '/tissue_specific_PPIs/' + tissue_id + '.txt'
     iii_net, genes_with_edges = net_util.read_net(ppi_file_name, len(geneid),
                                                   geneid)
+    print(len(iii_net.nodes()))
 
     tissue_enhanced_iso = util.find_tissue_enhanced_isoforms(
-        tissue_id + '_' + tissue_name, dataset)
+        tissue_id, folder, dataset)
 
     encoder = Encoder(encoder_config, iii_net)
 

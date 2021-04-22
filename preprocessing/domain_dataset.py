@@ -2,10 +2,15 @@ from keras.preprocessing import sequence
 import numpy as np
 from sys import argv
 
-script, dataset = argv
+if len(argv) > 2:
+    folder = argv[1]
+    dataset = '/' + argv[2]
+else:
+    folder = argv[1]
+    dataset = ''
 
 print('Convert isoform domains to numpy arrays...')
-fr = open('../data/domains/domain_id_mapping.txt')
+fr = open('../' + folder + '/domains/domain_id_mapping.txt')
 entry = fr.readline().split('\n')[0]
 domain_dic = {}
 while entry != '':
@@ -16,7 +21,7 @@ fr.close()
 
 domain_dic['0'] = 0
 
-fr = open('../data/domains/human_isoform_domains.txt')
+fr = open('../' + folder + '/domains/human_isoform_domains.txt')
 entry = fr.readline().split('\n')[0]
 isofDmDic = {}
 while entry != '':
@@ -31,8 +36,8 @@ fr.close()
 
 HUMANX_train_domain = []
 HUMANX_test_domain = []
-HUMANtrain_iso_id_ho_s = np.load('../data/input/' + dataset + '/train_isoform_list.npy')
-HUMANtest_iso_id_ho_s = np.load('../data/input/' + dataset + '/test_isoform_list.npy')
+HUMANtrain_iso_id_ho_s = np.load('../' + folder + '/input' + dataset + '/train_isoform_list.npy')
+HUMANtest_iso_id_ho_s = np.load('../' + folder + '/input' + dataset + '/test_isoform_list.npy')
 max_length = 0
 for isoid in HUMANtrain_iso_id_ho_s:
     if isoid in isofDmDic.keys():
@@ -61,5 +66,5 @@ print(HUMANX_train_np)
 print(HUMANX_test_np)
 print(HUMANX_train_np.shape)
 print(HUMANX_test_np.shape)
-np.save('../data/input/' + dataset + '/human_domain_train.npy', HUMANX_train_np)
-np.save('../data/input/' + dataset + '/human_domain_test.npy', HUMANX_test_np)
+np.save('../' + folder + '/input' + dataset + '/human_domain_train.npy', HUMANX_train_np)
+np.save('../' + folder + '/input' + dataset + '/human_domain_test.npy', HUMANX_test_np)

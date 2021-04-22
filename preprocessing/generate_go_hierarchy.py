@@ -1,5 +1,8 @@
 import numpy as np
 import os
+from sys import argv
+import requests
+script, folder = argv
 
 def gen_direct_ancestor_dic(go_obo_file):
     direct_ancestor_dic = {}
@@ -49,10 +52,15 @@ def gen_go_ancestor_dic(direct_ancestor_dic):
 
 if __name__=='__main__':
     print('Generate GO hierarchy...')
-    go_obo_file = '../data/GO_terms/go.obo'
+    go_obo_file = '../' + folder + '/GO_terms/go.obo'
+    if not os.path.exists(go_obo_file):
+        url='http://purl.obolibrary.org/obo/go.obo'
+        r = requests.get(url, allow_redirects=True)
+        open(go_obo_file, 'wb').write(r.content)
+
     direct_ancestor_dic = gen_direct_ancestor_dic(go_obo_file)
     print(len(direct_ancestor_dic.keys()))
 
     go_ancestor_dic = gen_go_ancestor_dic(direct_ancestor_dic)
-    np.save('../data/GO_terms/go_ancestors.npy', np.array([go_ancestor_dic]))
+    np.save('../' + folder + '/GO_terms/go_ancestors.npy', np.array([go_ancestor_dic]))
     print(go_ancestor_dic['GO:0005515'])

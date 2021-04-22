@@ -274,21 +274,7 @@ class Encoder(object):
               tissue_enhanced_iso, func_feature):
         print("train encoder...")
 
-        coexp_mask = []
-        for i in range(len(iso_list)):
-            if i < len(y_train) - len(y_test):
-                if i in pos_nodes_set:
-                    coexp_mask.append(1)
-                else:
-                    coexp_mask.append(0)
-            else:
-                iso = iso_list[i]
-                if iso in tissue_enhanced_iso:
-                    coexp_mask.append(1)
-                else:
-                    coexp_mask.append(0)
-        coexp_mask = np.array(coexp_mask)
-
+        coexp_mask = np.ones(len(iso_list))
         co_exp_array = co_exp_net.toarray()
 
         cur_iter_assign = self.cur_iter.assign(cur_iter)
@@ -514,12 +500,12 @@ class Encoder(object):
     def predict_link(self, iter, embeddings, W, gene_list,
                      y_train, y_test):
         G = nx.Graph()
-        nodes = np.arange(self.N_size)
+        nodes = np.arange(len(gene_list))
         G.add_nodes_from(nodes)
         predicted_edges = []
 
         nodes_idx = []
-        for i in range(self.N_size):
+        for i in range(len(nodes)):
             if self.ppi_net.degree(i) > 0:
                 nodes_idx.append(i)
 
