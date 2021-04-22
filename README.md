@@ -42,17 +42,18 @@ sh train.sh
 - Modify the files in the `./hyper_prms/` directory to adjust model hyper-parameters.
 
 ## Custom tissue-specific datasets
-- Create a new folder e.g. ./data_new/
-- Put your raw data in the folder created above in the format as specified in ./data_format/
+- Create a new folder e.g. `./my_data/`.
+- Put your raw data in the folder created above in the format as specified in `./data_format/`.
 - Run the following command to preprocess the data.
 ```
 cd preprocessing/
-sh data_preprocess.sh {your dataset}
+sh custom_dataset.sh {your dataset}
 ```
+- Create a corresponding file of hyper-parameters in the `./hyper_prms/` directory.
 - Run the following command to train a model on the dataset for the tissue of your interest.
 ```
 cd src/
-sh train.sh {your dataset}
+python joint_train.py {your dataset} {tissue ID}
 ```
 
 ## Predictions by FINER
