@@ -50,7 +50,7 @@ cd preprocessing/
 sh custom_dataset.sh {your dataset}
 ```
 - Create a corresponding file of hyper-parameters in the `./hyper_prms/` directory.
-- Run the following command to train a model on the dataset for the tissue of your interest.
+- Run the following command to train a model on the dataset for the specific tissue of interest.
 ```
 cd src/
 python joint_train.py {your dataset} {tissue ID}
