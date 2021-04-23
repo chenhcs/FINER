@@ -153,4 +153,4 @@ for tissue in tissues:
     #print(ppi_gene_list)
     print('Construct the co-expression network for ' + tissue + '...')
     num_edges, full_net_edges = coexpression_net(tissue, ppi_gene_list)
-    print(tissue, num_edges, full_net_edges, num_edges / full_net_edges)
+    print(tissue, num_edges, full_net_edges)
