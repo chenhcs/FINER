@@ -1,0 +1,1 @@
+{'neighbor_loss_hp': 1.0, 'lamda_increments': 20.0, 'initial_epochs': 25, 'epochs': 15, 'class_num': 4, 'nb_num': 10, 'train_size': 43289, 'test_size': 8773, 'finetune_decay_step': 500, 'finetune_learning_rate_decay_factor': 0.5, 'finetune_learning_rate': 0.0001, 'iteration_lr_decay_factor': 1.0}

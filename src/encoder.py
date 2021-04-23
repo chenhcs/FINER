@@ -274,7 +274,6 @@ class Encoder(object):
               tissue_enhanced_iso, func_feature):
         print("train encoder...")
 
-        coexp_mask = np.ones(len(iso_list))
         co_exp_array = co_exp_net.toarray()
 
         cur_iter_assign = self.cur_iter.assign(cur_iter)
@@ -292,6 +291,16 @@ class Encoder(object):
 
         degree = net_util.get_degree(cur_iter, nodes_with_edges, pos_nodes_set,
                                      self.iii_net)
+
+        coexp_mask = np.zeros(len(iso_list))
+        for i in range(len(iso_list)):
+            if i < len(y_train) - len(y_test):
+                if i in pos_nodes_set:
+                    coexp_mask[i] = 1
+            else:
+                iso = iso_list[i]
+                if iso in tissue_enhanced_iso:
+                    coexp_mask[i] = 1
 
         if cur_iter == 0:
             epochs = self.first_epochs

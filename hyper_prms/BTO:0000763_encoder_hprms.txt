@@ -1,1 +1,0 @@
-{'embedding_dim': 16, 'positive': 20, 'negative': 5, 'node_size': 43289, 'decay_step': 1000, 'learning_rate_decay_factor': 0.9, 'learning_rate': 0.02, 'first_epochs': 60, 'epochs': 60, 'lambda_func': 1.0, 'p': 4.0, 'q': 1.0, 'link_thresh': 0.73, 'train_size': 43289, 'test_size': 8773, 'min_degree': 10}

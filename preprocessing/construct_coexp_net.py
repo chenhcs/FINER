@@ -27,13 +27,13 @@ def ppi_genes(ppi_file):
 
 
 def coexpression_net(tissue, ppi_gene_list):
-    if dataset == 'brain':
+    if dataset == '/brain':
         if tissue.split('_')[1] in ['0000232', '0000233', '0001279']:
             X_train_isoid = np.load('../' + folder + '/input' + dataset + '/train_isoform_list.npy')
             X_test_isoid = np.load('../' + folder + '/input' + dataset + '/test_isoform_list.npy')
         else:
             return 0, 0
-    elif dataset == 'major':
+    elif dataset == '/major':
         if tissue.split('_')[1] in ['0000763', '0000562', '0001103', '0001379', '0001078', '0001363', '0000775', '0001487', '0000141', '0000648', '0001253', '0001422']:
             X_train_isoid = np.load('../' + folder + '/input' + dataset + '/train_isoform_list.npy')
             X_test_isoid = np.load('../' + folder + '/input' + dataset + '/test_isoform_list.npy')
