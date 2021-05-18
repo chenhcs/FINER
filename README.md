@@ -56,7 +56,7 @@ cd src/
 python joint_train.py {your dataset} {tissue ID}
 ```
 
-## Predictions and performance of FINER and other methods compared in the paper
+## Predictions and performance of FINER and other methods compared
 In the `./preds_and_perf/` directory, you can find:
 - Predictions on tissue-specific GO terms and tissue-specific isoform-isoform interactions by FINER.
 - Predicted tissue-specific isoform-isoform interaction networks of [TENSION](https://www.nature.com/articles/s41598-019-50119-x).
