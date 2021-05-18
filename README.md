@@ -60,7 +60,7 @@ python joint_train.py {your dataset} {tissue ID}
 In the `./preds_and_perf/` directory, you can find:
 - Predictions on tissue-specific GO terms and tissue-specific isoform-isoform interactions by FINER.
 - Predicted tissue-specific isoform-isoform interaction networks of [TENSION](https://www.nature.com/articles/s41598-019-50119-x).
-- Prediction performance on each tissue-specific GO term measured by AUC and AUPRC of FINER and other methods compared in the paper.
+- Prediction performance on each tissue-specific GO term of FINER and other methods compared in the paper.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
