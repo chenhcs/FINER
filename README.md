@@ -64,3 +64,6 @@ In the `./preds_and_perf/` directory, you can find:
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contact
+Email: hchen069@ucr.edu
